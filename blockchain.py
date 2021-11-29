@@ -103,39 +103,24 @@ print("Genesis Chain")
 print(blockchain.last_block.__dict__)
 
 
-x = 0
 
-seed(1)
-commands = ["buy", "sell", "exchange"]
-print("Mining started")
-while x <= 5:
-    num = randint(0, 2)
-    word = commands[num]
 
-    blockchain.add_new_transaction(word)
+
+@app.route('/chain', methods=['GET'])
+def get_chain():
+    chain_data = []
+    #NEW BLOCKS FO HERE
+    blockchain.add_new_transaction("send")
     blockchain.mine()
-    print(blockchain.last_block.__dict__)
-    x = x + 1
+    for block in blockchain.chain:
+        chain_data.append(block.__dict__)
+    return json.dumps({"length": len(chain_data),
+                       "chain": chain_data})
 
 
-print("All blockchain")
-for block in blockchain.chain:
-    print(block.__dict__)
+# In[45]:
 
-#
-#
-# @app.route('/chain', methods=['GET'])
-# def get_chain():
-#     chain_data = []
-#     for block in blockchain.chain:
-#         chain_data.append(block.__dict__)
-#     return json.dumps({"length": len(chain_data),
-#                        "chain": chain_data})
-#
-#
-# # In[45]:
-#
-#
-#
-# app.run(debug=True, port=5000)
+
+
+app.run(debug=True, port=5000)
 
